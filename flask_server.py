@@ -6,7 +6,7 @@ import datatable as dt
 
 app = Flask(__name__)
 
-f_name = 'data_2M.jay'
+f_name = 'data/data_2M.jay'
 print(f_name)
 
 dt_df = dt.fread(f_name)

@@ -22,10 +22,10 @@ def generate_csv(f_size):
     df = dt.Frame(df)
 
     print(f'writing to {f_size} csv')
-    # df.to_csv(f'data_{f_size}.csv', index=None)
+    # df.to_csv(f'data/data_{f_size}.csv', index=None)
     
-    df.to_csv(f'data_{f_size}.csv')
-    df.to_jay(f'data_{f_size}.jay')
+    df.to_csv(f'data/data_{f_size}.csv')
+    df.to_jay(f'data/data_{f_size}.jay')
 
 
 generate_csv('2K')
