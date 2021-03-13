@@ -31,8 +31,8 @@ class DataFrameService(df_pb2_grpc.DataFrameService):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         f_size = '2K'
-        # f_name = f'./data_{f_size}.csv'
-        f_name = f'./data_{f_size}.jay'
+        # f_name = f'./data/data_{f_size}.csv'
+        f_name = f'./data/data_{f_size}.jay'
 
         # only suport datatable compatible file format
         self.dt_df = dt.fread(f_name)
