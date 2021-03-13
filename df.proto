@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+// python3 -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. df.proto
+
+service DataFrameService {
+    rpc GetDFbyJSON(Empty) returns (stream DFRow);
+    rpc GetDFbyuJSON(Empty) returns (stream DFRow);
+    rpc GetDFbyorJSON(Empty) returns (stream DFRow);
+    rpc GetDFbyCSV(Empty) returns (stream DFRow);
+    rpc GetDFbydtCSV(Empty) returns (stream DFRow);
+    rpc GetDFbyJAY(Empty) returns (stream ByteRow);
+
+    rpc GetChunkedJSON(Empty) returns (stream DFRow);
+    rpc GetChunkeduJSON(Empty) returns (stream DFRow);
+    rpc GetChunkedorJSON(Empty) returns (stream DFRow);
+    rpc GetChunkedCSV(Empty) returns (stream DFRow);
+    rpc GetChunkeddtCSV(Empty) returns (stream DFRow);
+    rpc GetChunkedFeather(Empty) returns (stream DFRow);
+}
+
+message Empty { }
+
+message DFRow {
+    string row_data = 1;
+}
+message ByteRow {
+    bytes row_data = 1;
+}
