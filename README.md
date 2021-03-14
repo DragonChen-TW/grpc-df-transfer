@@ -6,11 +6,9 @@ Transfer dataframe through grpc with some efficient way
 - grpcio
 - grpcio-tools
 - flask
-
 - requests
 - numpy
 - pandas
-
 - ujson
 - orjson
 - datatable
@@ -28,28 +26,30 @@ Transfer dataframe through grpc with some efficient way
 1. run `server.py` to start a grpc server
 2. run `client.py` to get the results
 
+Start flask test:
+
+run `flask_server.py` and `flask_client.py`.
+
 #### Detail of tests
 
 There are two kinds of transfer strategys.
 
-1. split into rows
-Split the whole dataframe into small pieces row by rows.  
-Encode each small pieces into data pieces and transfer them.  
+##### split into rows
+- Split the whole dataframe into small pieces row by rows.  
+- Encode each small pieces into data pieces and transfer them.  
+- Process: pd.DataFrame --> row-by-row data --> encoded row data --> **transfer** --> encoded row data -> row-by-row data -> whole data
 
-Process: pd.DataFrame --> row-by-row data --> encoded row data --> **transfer** --> encoded row data -> row-by-row data -> whole data
-
-2. chunked dataframe
-Encode the whole data using one encoded strategy.  
-Split the whole encoded data into small data chunks and transfer them.  
-
-pd.DataFrame --> encoded data --> chunked data --> **transfer** --> chunked data -> encoded whole daat -> whole data
+##### chunked dataframe
+- Encode the whole data using one encoded strategy.  
+- Split the whole encoded data into small data chunks and transfer them.  
+- Process: pd.DataFrame --> encoded data --> chunked data --> **transfer** --> chunked data -> encoded whole daat -> whole data
 
 And we use some different packages:
 - [ujson](https://github.com/ultrajson/ultrajson)
 - [orjson](https://github.com/ijl/orjson)
 - [datatable](https://github.com/h2oai/datatable)
 
-You can choose them in the `client.py` file.
+You can change these implementation in the `client.py` file.
 
 ## Results
 

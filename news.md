@@ -38,13 +38,13 @@ for i in range(self.df.shape[0]):
 
 #### 2K file
 
-![image](/uploads/4054b0bf54d148af539c18146249b3a4/image.png)
+![image](plots/2K.png)
 
 orJSON 表現出色，只花費 csv 20% 或 json 50% 的時間
 
 #### 2M file
 
-![image](/uploads/cbb24c856cd3b5734ba54df089c148ef/image.png)
+![image](plots/2M.png)
 
 因為 message 量增加，chunked 的方法表現超越 row-by-row  
 dtCSV 表現追上 orJSON
@@ -52,20 +52,17 @@ dtCSV 表現追上 orJSON
 
 #### 200M file
 
-![image](/uploads/8f728853ab45ee1bcdc3913349a74284/image.png)
+![image](plots/200M.png)
 
 chunked 方法已全面超越 row-by-row  
 dtCSV 則表現比 orJSON 更好，chunked dtCSV 成為最快的方法  
 
 #### 200M excel table
 
-![image](/uploads/09d26cf1babdf99b9c93ba31dfcbaa9d/image.png)
+![image](plots/200M_table.png)
 
 orJSON 主要是 read 比普通 json 來得短非常多  
 dtCSV 的讀寫速度則是來到另一個境界
-
-
-[comparison.xlsx](/uploads/b134be879aa2bbf767cb9db4c4924842/comparison.xlsx)
 
 
 ----------------------------------------------------------------
