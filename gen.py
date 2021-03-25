@@ -1,8 +1,7 @@
+import os
 import numpy as np
 import pandas as pd
 import datatable as dt
-
-print('generating data')
 
 def generate_csv(f_size):
     row_size = {
@@ -27,6 +26,9 @@ def generate_csv(f_size):
     df.to_csv(f'data/data_{f_size}.csv')
     df.to_jay(f'data/data_{f_size}.jay')
 
+print('generating data')
+
+os.makedirs('data', exist_ok=True)
 
 generate_csv('2K')
 generate_csv('2M')
