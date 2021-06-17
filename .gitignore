@@ -1,5 +1,7 @@
-# Data
+# Data and grpc
 data/*
+*_pb2_grpc.py
+*_pb2.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

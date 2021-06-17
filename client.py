@@ -106,25 +106,25 @@ def run():
     # with grpc.insecure_channel('localhost:50051') as channel:
     with grpc.insecure_channel('127.0.0.1:30051') as channel:
         stub = df_pb2_grpc.DataFrameServiceStub(channel)
-        print('-----' * 5, 'GetDFbyJSON', '-----' * 5)
-        get_df(stub, stub.GetDFbyJSON, json.loads)
+        print('-----' * 5, 'GetRowJSON', '-----' * 5)
+        get_df(stub, stub.GetRowJSON, json.loads)
 
-        print('-----' * 5, 'GetDFbyuJSON', '-----' * 5)
-        get_df(stub, stub.GetDFbyuJSON, ujson.loads)
+        print('-----' * 5, 'GetRowuJSON', '-----' * 5)
+        get_df(stub, stub.GetRowuJSON, ujson.loads)
 
-        print('-----' * 5, 'GetDFbyorJSON', '-----' * 5)
-        get_df(stub, stub.GetDFbyorJSON, orjson.loads)
+        print('-----' * 5, 'GetRoworJSON', '-----' * 5)
+        get_df(stub, stub.GetRoworJSON, orjson.loads)
 
-        print('-----' * 5, 'GetDFbyCSV', '-----' * 5)
+        print('-----' * 5, 'GetRowCSV', '-----' * 5)
         def lambda_csv(data): return pd.DataFrame(data.split(','))
-        get_df(stub, stub.GetDFbyCSV, lambda_csv)
+        get_df(stub, stub.GetRowCSV, lambda_csv)
 
-        print('-----' * 5, 'GetDFbydtCSV', '-----' * 5)
+        print('-----' * 5, 'GetRowdtCSV', '-----' * 5)
         def lambda_dtcsv(data): return dt.fread(text=data)
-        get_df(stub, stub.GetDFbydtCSV, lambda_dtcsv)
+        get_df(stub, stub.GetRowdtCSV, lambda_dtcsv)
     
-        print('-----' * 5, 'GetDFbyJAY', '-----' * 5)
-        get_df(stub, stub.GetDFbyJAY, dt.fread)
+        print('-----' * 5, 'GetRowJAY', '-----' * 5)
+        get_df(stub, stub.GetRowJAY, dt.fread)
 
 
         print('-----' * 5, 'GetChunkedJSON', '-----' * 5)

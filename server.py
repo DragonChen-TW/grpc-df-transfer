@@ -42,7 +42,7 @@ class DataFrameService(df_pb2_grpc.DataFrameService):
         print(self.df[0:5])
 
     # ---------- gRPC methods ----------
-    def GetDFbyJSON(self, request, context):
+    def GetRowJSON(self, request, context):
         print('send_df_json')
         # for row in self.df.iterrows():
         #     yield data_wrapper(row[1].to_json())
@@ -51,7 +51,7 @@ class DataFrameService(df_pb2_grpc.DataFrameService):
             yield data_wrapper(self.df.loc[i, :].to_json())
         print('JSON cost', time.time() - t)
     
-    def GetDFbyuJSON(self, request, context):
+    def GetRowuJSON(self, request, context):
         print('send_df_ujson')
         # for row in self.df.iterrows():
         #     yield data_wrapper(ujson.encode(row[1].to_dict()))
@@ -60,7 +60,7 @@ class DataFrameService(df_pb2_grpc.DataFrameService):
             yield data_wrapper(ujson.encode(self.df.loc[i, :].to_dict()))
         print('uJSON cost', time.time() - t)
 
-    def GetDFbyorJSON(self, request, context):
+    def GetRoworJSON(self, request, context):
         print('send_df_orjson')
         # for row in self.df.iterrows():
         #     yield data_wrapper(ujson.encode(row[1].to_dict()))
@@ -72,21 +72,21 @@ class DataFrameService(df_pb2_grpc.DataFrameService):
             yield data_wrapper(s.decode())
         print('orJSON cost', time.time() - t)
     
-    def GetDFbyCSV(self, request, context):
+    def GetRowCSV(self, request, context):
         print('send_df_csv')
         t = time.time()
         for row in self.df.iterrows():
             yield data_wrapper(row[1].to_csv())
         print('CSV cost', time.time() - t)
     
-    def GetDFbydtCSV(self, request, context):
+    def GetRowdtCSV(self, request, context):
         print('send_df_dtcsv')
         t = time.time()
         for i in range(self.dt_df.shape[0]):
             yield data_wrapper(self.dt_df[i, :].to_csv())
         print('dtCSV cost', time.time() - t)
     
-    def GetDFbyJAY(self, request, context):
+    def GetRowJAY(self, request, context):
         print('send_df_jay')
         t = time.time()
         for i in range(self.dt_df.shape[0]):
