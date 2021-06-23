@@ -13,6 +13,13 @@ def data_wrapper(s):
     '''Wrap a python dict into gRPC object'''
     return df_pb2.DFRow(row_data=s)
 
+def column_data_wrapper(d):
+    '''Wrap a dict length is 20 into gRPC object'''
+    return df_pb2.ColumnStringRow(**{
+        f'column{i + 1}': v
+        for i, (_, v) in enumerate(d.items())
+    })
+
 def chunk_send(out_string):
     max_size = len(out_string)
     offset = 0
@@ -26,8 +33,10 @@ chunk_size = 1024 * 1024  # 1024 KB
 class DataFrameService(df_pb2_grpc.DataFrameService):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        is_compat = True
+        compat = '_compat' if is_compat else ''
         f_size = '800K'
-        f_name = f'./data/generated_{f_size}.json'
+        f_name = f'./data/JSON_{f_size}{compat}.json'
 
         # only suport datatable compatible file format
         self.df = json.load(open(f_name, encoding='utf-8'))
@@ -73,6 +82,13 @@ class DataFrameService(df_pb2_grpc.DataFrameService):
         print('chunked_orjson')
         out_string = orjson.dumps(self.df).decode()
         return chunk_send(out_string)
+
+    def GetColumnJSON(self, request, context):
+        print('send_column_json')
+        t = time.time()
+        for i in range(len(self.df)):
+            yield column_data_wrapper(self.df[i])
+        print('JSON cost', time.time() - t)
 
 def serve():
     # using ThreadPool to build server

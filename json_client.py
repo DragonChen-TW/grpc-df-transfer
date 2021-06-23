@@ -49,12 +49,13 @@ def get_df(stub, rpc_f, read_f):
 
         count = 0
         total_size = 0
+        all_data = []
         for d in response:
             if i == 0 and count == 0:
                 print('len', len(d.row_data), 'x ', end='')
                 # print('d', d.row_data)
             total_size += len(d.row_data)
-            row = read_f(d.row_data)
+            all_data.append(read_f(d.row_data))
             count += 1
         
         t = time.time() - t
@@ -64,6 +65,35 @@ def get_df(stub, rpc_f, read_f):
             print('row', count)
             # print('row_s', d.row_data)
             print('total', total_size)
+
+    total_mu = np.mean(total_time).round(4)
+    total_std = np.std(total_time).round(4)
+    print('total  ', total_mu, total_std)
+
+def get_column(stub, rpc_f):
+    total_time = []
+
+    for i in range(n_runs):
+        req = df_pb2.Empty()
+        t = time.time()
+        response = rpc_f(req)
+
+        count = 0
+        # total_size = 0
+        all_data = []
+        for d in response:
+            all_data.append({
+                f'column{i}': getattr(d, f'column{i}') for i in range(1, 16)
+            })
+            count += 1
+        
+        t = time.time() - t
+        total_time.append(t)
+
+        if i == 0:
+            print('row', count)
+            # print('row_s', d.row_data)
+            # print('total', total_size)
 
     total_mu = np.mean(total_time).round(4)
     total_std = np.std(total_time).round(4)
@@ -125,6 +155,11 @@ def run():
 
         print('-----' * 5, 'GetChunkedorJSON', '-----' * 5)
         get_chunk(stub, stub.GetChunkedorJSON, orjson.loads)
+
+
+
+        print('-----' * 5, 'GetColumnJSON', '-----' * 5)
+        get_column(stub, stub.GetColumnJSON)
 
 if __name__ == "__main__":
     run()

@@ -16,12 +16,37 @@ service DataFrameService {
     rpc GetChunkedCSV(Empty) returns (stream DFRow);
     rpc GetChunkeddtCSV(Empty) returns (stream DFRow);
     rpc GetChunkedFeather(Empty) returns (stream DFRow);
+
+    // for json
+    rpc GetColumnJSON(Empty) returns (stream ColumnStringRow);
 }
 
 message Empty { }
 
 message DFRow {
     string row_data = 1;
+}
+message ColumnStringRow {
+    double column1 = 1;
+    double column2 = 2;
+    double column3 = 3;
+    double column4 = 4;
+    double column5 = 5;
+    double column6 = 6;
+    double column7 = 7;
+    double column8 = 8;
+    double column9 = 9;
+    double column10 = 10;
+    double column11 = 11;
+    double column12 = 12;
+    double column13 = 13;
+    double column14 = 14;
+    double column15 = 15;
+    double column16 = 16;
+    double column17 = 17;
+    double column18 = 18;
+    double column19 = 19;
+    double column20 = 20;
 }
 message ByteRow {
     bytes row_data = 1;
