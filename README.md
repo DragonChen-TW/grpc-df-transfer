@@ -26,9 +26,11 @@ Transfer dataframe through grpc with some efficient way
 1. run `server.py` to start a grpc server
 2. run `client.py` to get the results
 
-Start flask test:
-
+#### Start flask test
 run `flask_server.py` and `flask_client.py`.
+
+#### Start JSON test
+run `json_server.py` and `json_client.py`.
 
 #### Detail of tests
 
