@@ -1,7 +1,11 @@
 # Data and grpc
 data/*
+/benchmark.csv
 *_pb2_grpc.py
 *_pb2.py
+
+# mac
+.DS_Store
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

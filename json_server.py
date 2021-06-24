@@ -14,11 +14,11 @@ def data_wrapper(s):
     return df_pb2.DFRow(row_data=s)
 
 def column_data_wrapper(d):
-    '''Wrap a dict length is 20 into gRPC object'''
+    '''Wrap a dict length is 15 into gRPC object'''
     return df_pb2.ColumnStringRow(**{
         f'column{i + 1}': v
         for i, (_, v) in enumerate(d.items())
-    })
+    }) # ColumnStringRow(column1=d['column1'], column2=d['column2'] ... )
 
 def chunk_send(out_string):
     max_size = len(out_string)
@@ -28,17 +28,17 @@ def chunk_send(out_string):
         offset += chunk_size
         yield data_wrapper(chunk_s)
 
-chunk_size = 1024 * 1024  # 1024 KB
+chunk_size = 256 * 1024  # 128 ~ 1024 KB performance 差不多
 
 class DataFrameService(df_pb2_grpc.DataFrameService):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        is_compat = True
+        # Read JSON by setting
+        is_compat = False
         compat = '_compat' if is_compat else ''
-        f_size = '800K'
+        f_size = '800K'  # 800K or 1600K
         f_name = f'./data/JSON_{f_size}{compat}.json'
 
-        # only suport datatable compatible file format
         self.df = json.load(open(f_name, encoding='utf-8'))
 
         print('len', len(self.df))

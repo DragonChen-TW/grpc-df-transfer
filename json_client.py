@@ -16,6 +16,9 @@ import numpy as np
 
 # global variables
 n_runs = 5
+is_output = False
+out_csv = './benchmark.csv'
+out_string = 'method, total_mean, total_std\n'
 
 class Meter:
     def __init__(self):
@@ -40,6 +43,10 @@ class Meter:
         ]
 
 def get_df(stub, rpc_f, read_f):
+    '''Higher-level logic of row-by-row get dataframe from rpc_f'''
+    global out_string
+    name = rpc_f._method.decode().split('/')[-1]
+    print('-----' * 5, name, '-----' * 5)
     total_time = []
 
     for i in range(n_runs):
@@ -70,7 +77,13 @@ def get_df(stub, rpc_f, read_f):
     total_std = np.std(total_time).round(4)
     print('total  ', total_mu, total_std)
 
+    out_string += f'{name},{total_mu},{total_std}\n'
+
 def get_column(stub, rpc_f):
+    '''Higher-level logic of column get dataframe from rpc_f'''
+    global out_string
+    name = rpc_f._method.decode().split('/')[-1]
+    print('-----' * 5, name, '-----' * 5)
     total_time = []
 
     for i in range(n_runs):
@@ -98,8 +111,13 @@ def get_column(stub, rpc_f):
     total_mu = np.mean(total_time).round(4)
     total_std = np.std(total_time).round(4)
     print('total  ', total_mu, total_std)
+    out_string += f'{name},{total_mu},{total_std}\n'
 
 def get_chunk(stub, rpc_f, read_f):
+    '''Higher-level logic of chunked get dataframe from rpc_f'''
+    global out_string
+    name = rpc_f._method.decode().split('/')[-1]
+    print('-----' * 5, name, '-----' * 5)
     m = Meter()
     for i in range(n_runs):
         req = df_pb2.Empty()
@@ -127,39 +145,31 @@ def get_chunk(stub, rpc_f, read_f):
     
     keys = ['get  ', 'read ', 'total']
     stat = m.stat()
-    for s in zip(keys, stat):
-        print(s)
+    # for s in zip(keys, stat):
+    #     print(s)
+    print('total', stat[-1])
     
     print('l', len(m.get_time))
+
+    out_string += f'{name},{stat[-1][0]},{stat[-1][1]}\n'
 
 def run():
     # with grpc.insecure_channel('localhost:50051') as channel:
     with grpc.insecure_channel('127.0.0.1:30051') as channel:
         stub = df_pb2_grpc.DataFrameServiceStub(channel)
-        print('-----' * 5, 'GetRowJSON', '-----' * 5)
         get_df(stub, stub.GetRowJSON, json.loads)
-
-        print('-----' * 5, 'GetRowuJSON', '-----' * 5)
         get_df(stub, stub.GetRowuJSON, ujson.loads)
-
-        print('-----' * 5, 'GetRoworJSON', '-----' * 5)
         get_df(stub, stub.GetRoworJSON, orjson.loads)
 
-
-
-        print('-----' * 5, 'GetChunkedJSON', '-----' * 5)
         get_chunk(stub, stub.GetChunkedJSON, json.loads)
-
-        print('-----' * 5, 'GetChunkeduJSON', '-----' * 5)
         get_chunk(stub, stub.GetChunkeduJSON, ujson.loads)
-
-        print('-----' * 5, 'GetChunkedorJSON', '-----' * 5)
         get_chunk(stub, stub.GetChunkedorJSON, orjson.loads)
 
-
-
-        print('-----' * 5, 'GetColumnJSON', '-----' * 5)
         get_column(stub, stub.GetColumnJSON)
+    
+    if is_output:
+        with open(out_csv, 'w', encoding='utf-8') as f:
+            f.write(out_string)
 
 if __name__ == "__main__":
     run()

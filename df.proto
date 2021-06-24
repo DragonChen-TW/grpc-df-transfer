@@ -17,7 +17,7 @@ service DataFrameService {
     rpc GetChunkeddtCSV(Empty) returns (stream DFRow);
     rpc GetChunkedFeather(Empty) returns (stream DFRow);
 
-    // for json
+    // for json_server and json_client
     rpc GetColumnJSON(Empty) returns (stream ColumnStringRow);
 }
 
@@ -48,6 +48,6 @@ message ColumnStringRow {
     double column19 = 19;
     double column20 = 20;
 }
-message ByteRow {
+message ByteRow { // for feather, jay binary file format
     bytes row_data = 1;
 }
